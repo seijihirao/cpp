@@ -23,8 +23,9 @@ class Controller {
      * Deve receber um model e um view previamente
      * alocados.
      *
-     * @param model Um Model
-     * @param view Um View
+     * \param model Um Model
+     * \param view Um View
+     * \return Nada (este é um construtor!)
      * */
     Controller(Model &model, View &view);
 
