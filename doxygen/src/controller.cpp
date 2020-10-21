@@ -13,4 +13,9 @@ void Controller::step() {
   view.render(0.5, 0.2);
 }
 
-Controller::~Controller() { }
+Controller::~Controller() {
+  /** Esta documentacao esta no arquivo cpp
+   *
+   */
+
+}
