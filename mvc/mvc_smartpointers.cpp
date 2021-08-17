@@ -31,15 +31,16 @@ void View::render(int data) {
 class Controller
 {
   private:
-    Model model;
-    View view;
+    std::shared_ptr<Model> const model;
+    std::shared_ptr<View> const view;
 
   public:
-    Controller(Model &model, View &view);
+    Controller(std::shared_ptr<Model> model, std::shared_ptr<View> view);
     void update();
 };
 
-Controller::Controller(Model &model, View &view) :
+Controller::Controller(std::shared_ptr<Model> model,
+    std::shared_ptr<View> view) :
   // Lista de inicialiacao (initialization list)
   model(model),
   view(view)
@@ -48,16 +49,16 @@ Controller::Controller(Model &model, View &view) :
 }
 
 void Controller::update() {
-  model.set_data(model.get_data() + 1);
-  view.render((int)model.get_data());
+  model->set_data(model->get_data() + 1);
+  view->render((int)model->get_data());
 }
 
 int main()
 {
-  Model model = Model();
-  View view = View();
-  Controller controller = Controller(model, view);
+  std::shared_ptr<Model> model (new Model);
+  std::shared_ptr<View> view (new View);
+  std::unique_ptr<Controller> controller (new Controller(model, view));
   for (int i=0; i<5; i++)
-    controller.update();
+    controller->update();
   return 0;
 }
