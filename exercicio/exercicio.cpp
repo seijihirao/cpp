@@ -1,4 +1,4 @@
-
+#include <memory>
 #include <iostream>
 
 class Coord {
@@ -52,10 +52,10 @@ class Cube {
  * Main class
  */
 int main() {
-  Coord coord(50, 10);
-  Cube cube(10, 20, 30);
+    std::unique_ptr<Coord> coord (new Coord(50, 10));
+    std::unique_ptr<Cube> cube (new Cube(10, 20, 30));
+    
+    cube->printVolume();
 
-  cube.printVolume();
-
-  return 0;
+    return 0;
 }
