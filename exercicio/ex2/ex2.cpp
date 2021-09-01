@@ -29,20 +29,16 @@ class SystemModel {
          * @param initial_x - initial position
          * @param initial_v - initial speed
          */
-        SystemModel(double mass, double spring_constant, double absorber_constant, double initial_x, double initial_v) {
-            x = initial_x;
-            v = initial_v;
-            m = mass;
-            k = spring_constant;
-            b = absorber_constant;
+        SystemModel(double mass, double spring_constant, double absorber_constant, double initial_x, double initial_v) : 
+            x(initial_x), v(initial_v), m(mass), k(spring_constant), b(absorber_constant) {
             a = 0;
         }
 
-        double getForce() {
+        double getForce() const {
             return -k*x -b*v;
         }
 
-        double getAcceleration() {
+        double getAcceleration() const {
             return a;
         }
         
@@ -50,7 +46,7 @@ class SystemModel {
             this->a = a;
         }
 
-        double getVelocity() {
+        double getVelocity() const {
             return v;
         }
 
@@ -58,7 +54,7 @@ class SystemModel {
             this->v = v;
         }
 
-        double getPosition() {
+        double getPosition() const {
             return x;
         }
 
@@ -66,7 +62,7 @@ class SystemModel {
             this->x = x;
         }
 
-        double getMass() {
+        double getMass() const {
             return this->m;
         }
 
@@ -85,7 +81,7 @@ class SystemController {
     private:
         int t;
         double dt;
-        shared_ptr<SystemModel> model;
+        const shared_ptr<SystemModel> model;
     public:
         /**
          * Constrols a Spring-mass System
@@ -93,15 +89,13 @@ class SystemController {
          * @params model - system model
          * @params dt - time increase step
          */
-        SystemController(shared_ptr<SystemModel> model, double dt) {
-            this->model = model;
-            this->dt = dt;
+        SystemController(shared_ptr<SystemModel> model, double dt) : model(model), dt(dt) {
         }
 
         /**
          * Calculate next step
          */
-        shared_ptr<SystemModel> next() {
+        const shared_ptr<SystemModel> next() const {
             double F = model->getForce();
             model->setAcceleration(F/model->getMass());
             model->setVelocity(model->getVelocity() + model->getAcceleration() * dt);
@@ -118,7 +112,7 @@ class SystemController {
  */
 class SystemView {
     private:
-        shared_ptr<SystemModel> model;
+        const shared_ptr<SystemModel> model;
 
     public:
         /**
@@ -126,8 +120,7 @@ class SystemView {
          *
          * @params model - system model
          */
-        SystemView(shared_ptr<SystemModel> model) {
-            this->model = model;
+        SystemView(shared_ptr<SystemModel> model) : model(model) {
         }
 
         /**
@@ -135,7 +128,7 @@ class SystemView {
          *
          * @returns volume
          */
-        void printData() {
+        void printData() const {
             cout << "\r";
             for (int i = 0; i < 100; i++) {
                 int cur_x = ceil(model->getPosition()) + 50;
@@ -158,7 +151,7 @@ class SystemView {
  * Main class
  */
 int main() {
-    shared_ptr<SystemModel> model (new SystemModel(20, 20, 5, 40, 0));
+    shared_ptr<SystemModel> model (new SystemModel(20, 20, 5, -50, 0));
     shared_ptr<SystemController> controller (new SystemController(model, 0.1f));
     shared_ptr<SystemView> view (new SystemView(model));
     unsigned int step = 10 * 1000;
